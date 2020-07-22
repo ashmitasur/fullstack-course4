@@ -97,7 +97,10 @@ function buildAndShowHomeHTML (categories) {
   $ajaxUtils.sendGetRequest(
     homeHtmlUrl,
     function (homeHtml) {
-   ar randomcategory = chooseRandomCategory (categories);
+      $ajaxUtils.sendGetRequest(
+        menuItemHtml,
+        function (menuItemHtml) {
+   var randomcategory = chooseRandomCategory (categories);
       insertHtml("#main-content", var randomcategory);
 
       // TODO: STEP 2: Here, call chooseRandomCategory, passing it retrieved 'categories'
@@ -126,7 +129,9 @@ function buildAndShowHomeHTML (categories) {
       // ....
 
     },
-    false); // False here because we are getting just regular HTML from the server, so no need to process JSON.
+    false);
+      },
+    false);// False here because we are getting just regular HTML from the server, so no need to process JSON.
 }
 
 
