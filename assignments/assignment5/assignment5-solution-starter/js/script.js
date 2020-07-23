@@ -89,7 +89,6 @@ $ajaxUtils.sendGetRequest(
 });
 // *** finish **
 
-
 // Builds HTML for the home page based on categories array
 // returned from the server.
 function buildAndShowHomeHTML (categories) {
@@ -98,26 +97,13 @@ function buildAndShowHomeHTML (categories) {
   $ajaxUtils.sendGetRequest(
     homeHtmlUrl,
     function (homeHtml) {
-     $ajaxUtils.sendGetRequest(
-        categoryHtml,
-        function (categoryHtml) {
-          // Switch CSS class active to menu button
-          switchMenuToActive();
-            var chosenCategoryShortName = chooseRandomCategory(categories).short_name;
-
-chosenCategoryShortName = "'" + chosenCategoryShortName + "'";
-       insertHtml("#main-content",chosenCategoryShortName );
-         
-        },
-        false);
-   
-      
 
       // TODO: STEP 2: Here, call chooseRandomCategory, passing it retrieved 'categories'
       // Pay attention to what type of data that function returns vs what the chosenCategoryShortName
       // variable's name implies it expects.
       // var chosenCategoryShortName = ....
-     
+      var chosenCategoryShortName = chooseRandomCategory(categories).short_name;
+
 
       // TODO: STEP 3: Substitute {{randomCategoryShortName}} in the home html snippet with the
       // chosen category from STEP 2. Use existing insertProperty function for that purpose.
@@ -131,19 +117,23 @@ chosenCategoryShortName = "'" + chosenCategoryShortName + "'";
       // it into the home html snippet.
       //
       // var homeHtmlToInsertIntoMainPage = ....
+      chosenCategoryShortName = "'" + chosenCategoryShortName + "'";
+      var homeHtmlToInsertIntoMainPage = insertProperty(homeHtml, "randomCategoryShortName", chosenCategoryShortName);
 
 
       // TODO: STEP 4: Insert the the produced HTML in STEP 3 into the main page
       // Use the existing insertHtml function for that purpose. Look through this code for an example
       // of how to do that.
       // ....
+      insertHtml('#main-content', homeHtmlToInsertIntoMainPage);
 
     },
-    false);
-      // False here because we are getting just regular HTML from the server, so no need to process JSON.
+    false); // False here because we are getting just regular HTML from the server, so no need to process JSON.
 }
 
 
+
+      
 // Given array of category objects, returns a random category object.
 function chooseRandomCategory (categories) {
   // Choose a random index into the array (from 0 inclusively until array length (exclusively))
