@@ -82,11 +82,9 @@ document.addEventListener("DOMContentLoaded", function (event) {
 // On first load, show home view
 showLoading("#main-content");
 $ajaxUtils.sendGetRequest(
-  homeHtmlUrl ,
-    function (responseText) {
-    document.querySelector("#main-content")
-      .innerHTML = responseText;
-  }, // ***** <---- TODO: STEP 1: Substitute [...] ******
+  allCategoriesUrl,
+   buildAndShowHomeHTML, 
+   // ***** <---- TODO: STEP 1: Substitute [...] ******
   true); // Explicitly setting the flag to get JSON from server processed into an object literal
 });
 // *** finish **
@@ -100,17 +98,20 @@ function buildAndShowHomeHTML (categories) {
   $ajaxUtils.sendGetRequest(
     homeHtmlUrl,
     function (homeHtml) {
-      dc.loadMenuCategories = function () {
-  showLoading("#main-content");
-  $ajaxUtils.sendGetRequest(
-    allCategoriesUrl,
-    buildAndShowHomeHTML);
-};
-   var chosenCategoryShortName = chooseRandomCategory(categories);
+     $ajaxUtils.sendGetRequest(
+        categoryHtml,
+        function (categoryHtml) {
+          // Switch CSS class active to menu button
+          switchMenuToActive();
+            var chosenCategoryShortName = chooseRandomCategory(categories).short_name;
 
-     
-var homeHtmlToInsertIntoMainPage = 
-insertProperty(homeHtml, "randomCategoryShortName", "'" + chosenCategoryShortName.short_name + "'");
+chosenCategoryShortName = "'" + chosenCategoryShortName + "'";
+       insertHtml("#main-content",chosenCategoryShortName );
+         
+        },
+        false);
+   
+      
 
       // TODO: STEP 2: Here, call chooseRandomCategory, passing it retrieved 'categories'
       // Pay attention to what type of data that function returns vs what the chosenCategoryShortName
@@ -139,8 +140,7 @@ insertProperty(homeHtml, "randomCategoryShortName", "'" + chosenCategoryShortNam
 
     },
     false);
-      },
-    false);// False here because we are getting just regular HTML from the server, so no need to process JSON.
+      // False here because we are getting just regular HTML from the server, so no need to process JSON.
 }
 
 
